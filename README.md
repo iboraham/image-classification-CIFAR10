@@ -16,7 +16,7 @@ To download the dataset, you can use the following command:
 sh data/download_cifar10.sh
 ```
 
-### Unpickling the dataset
+### Unpickling the dataset
 
 To unpickle the dataset, you can use the following command:
 
