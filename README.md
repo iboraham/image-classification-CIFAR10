@@ -13,7 +13,7 @@ Cifar 10 is a dataset of 60,000 32x32 color images in 10 classes. Each image is 
 To download the dataset, you can use the following command:
 
 ```bash
-sh data/download_cifar10.sh
+sh download/download_cifar10.sh
 ```
 
 ### Unpickling the dataset

@@ -1,6 +1,5 @@
 import pickle
 
-import pandas as pd
 import numpy as np
 
 
@@ -23,17 +22,24 @@ def unpickle(filePath: str) -> dict:
     return resDict
 
 
-def unpickle_cifar10() -> None:
+def unpickle_cifar10(verbose: bool = False) -> None:
     """Unpickle the CIFAR-10 dataset's all batches and create a dataset."""
-    images = []
-    labels = []
+    images = np.empty((50000, 32, 32, 3), dtype=np.uint8)
+    labels = np.empty((50000,))
+    counter = 0
     for i in range(1, 6):
         dataBatch = unpickle(f"./cifar-10-batches-py/data_batch_{i}")
         imagesBatch = dataBatch[b"data"].copy()
         labelBatch = dataBatch[b"labels"].copy()
-        imagesBatch = imagesBatch.reshape(10000, 3, 32, 32)
-        images = np.concatenate(images)
-        labels = np.concatenate(labels)
+        imagesBatch = imagesBatch.reshape(10000, 32, 32, 3)
+        images[counter : counter + 10000] = imagesBatch
+        labels[counter : counter + 10000] = labelBatch
+        counter += 1
+    if verbose:
+        print(f"{counter} batches unpickled")
+        print(f"Images shape: {images.shape}")
+        print(f"Labels shape: {labels.shape}")
+    return images, labels
 
 
 if __name__ == "__main__":
