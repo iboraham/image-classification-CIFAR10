@@ -2,3 +2,7 @@ pandas
 numpy
 albumentations
 torch
+tqdm
+psutil
+timm==0.5.4
+scikit-learn

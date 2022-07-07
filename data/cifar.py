@@ -1,4 +1,5 @@
 import torch
+import numpy as np
 
 
 class cifar10_dataset(torch.utils.data.Dataset):
@@ -15,6 +16,8 @@ class cifar10_dataset(torch.utils.data.Dataset):
         label = self.labels[idx]
         if self.transforms is not None:
             image = self.transforms(image=image)["image"]
+
+        image = np.transpose(image, (2, 0, 1))
 
         return {
             "image": torch.tensor(image, dtype=torch.float),
