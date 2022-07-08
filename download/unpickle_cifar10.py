@@ -42,5 +42,16 @@ def unpickle_cifar10(verbose: bool = False) -> None:
     return images, labels
 
 
+def unpickle_cifar10_test(verbose: bool = False) -> None:
+    """Unpickle the CIFAR-10 test dataset and create a dataset."""
+    dataBatch = unpickle(f"./cifar-10-batches-py/test_batch")
+    images = dataBatch[b"data"].copy()
+    labels = dataBatch[b"labels"].copy()
+    if verbose:
+        print(f"Images shape: {images.shape}")
+        print(f"Labels shape: {labels.shape}")
+    return images, labels
+
+
 if __name__ == "__main__":
     unpickle_cifar10()

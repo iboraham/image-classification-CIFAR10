@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader, random_split
 
 from data import cifar10_dataset
 from data.transformations import get_test_transformations, get_train_transformations
-from download.unpickle_cifar10 import unpickle_cifar10
+from download.unpickle_cifar10 import unpickle_cifar10, unpickle_cifar10_test
 from model import cifar10_model
 import tez
 from tez.callbacks import EarlyStopping
@@ -25,7 +25,7 @@ CONFIG = tez.TezConfig(
     device="cpu",
     step_scheduler_after="epoch",
     step_scheduler_metric="valid_rmse",
-    fp16=False,
+    fp16=True,
 )
 
 
@@ -34,10 +34,15 @@ def main(args):
     images, labels = unpickle_cifar10()
 
     # Create a dataset object
-    dataset = cifar10_dataset(images, labels, transforms=get_train_transformations())
+    train_dataset = cifar10_dataset(
+        images, labels, transforms=get_train_transformations()
+    )
 
-    # Split the data into training and validation sets
-    train_dataset, valid_dataset = random_split(dataset, [40000, 10000])
+    # Unpickle test dataset
+    test_images, test_labels = unpickle_cifar10_test()
+    valid_dataset = cifar10_dataset(
+        test_images, test_labels, transforms=get_test_transformations()
+    )
 
     model = cifar10_model(num_classes=10)
     model = tez.Tez(model)
