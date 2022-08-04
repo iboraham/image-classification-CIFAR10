@@ -48,6 +48,8 @@ def main(args):
     }
 
     model = CIFAR10Model(num_classes=10)
+    model.to(DEVICE)
+
     l1_criterion = nn.CrossEntropyLoss()
     # l1_optim = torch.optim.SGD(model.parameters(), lr=1e-3, weight_decay=1e-4)
     l1_optim = torch.optim.Adam(
