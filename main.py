@@ -37,7 +37,7 @@ def main(args):
     dataloaders = {
         "train": DataLoader(
             train_dataset,
-            batch_size=128,
+            batch_size=64,
             shuffle=True,
             pin_memory=PIN_MEMORY,
             num_workers=4,
