@@ -1,58 +1,75 @@
 import argparse
-from distutils.command.config import config
+import warnings
 
-from torch.utils.data import DataLoader, random_split
+import torch
+from sklearn.model_selection import train_test_split
+from torch import nn
+from torch.optim import lr_scheduler
+from torch.utils.data import DataLoader
 
 from data import cifar10_dataset
 from data.transformations import get_test_transformations, get_train_transformations
 from download.unpickle_cifar10 import unpickle_cifar10, unpickle_cifar10_test
-from model import cifar10_model
-import tez
-from tez.callbacks import EarlyStopping
+from model import CIFAR10Model
+from trainer import EarlyStopping, train_model
 
-ES = EarlyStopping(
-    monitor="valid_rmse",
-    model_path=f"saved_model/model_f{0}.bin",
-    patience=3,
-    mode="min",
-    save_weights_only=True,
-)
-
-CONFIG = tez.TezConfig(
-    training_batch_size=32,
-    validation_batch_size=64,
-    epochs=10,
-    device="cpu",
-    step_scheduler_after="epoch",
-    step_scheduler_metric="valid_rmse",
-    fp16=True,
-)
+warnings.filterwarnings("ignore")
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+PIN_MEMORY = False
+if DEVICE == "cuda":
+    torch.backends.cudnn.benchmark = True  # Helps optimize training w/ GPU
+    PIN_MEMORY = True  # use this only w/ GPU
 
 
 def main(args):
     # Unpickle the CIFAR-10 dataset
     images, labels = unpickle_cifar10()
 
-    # Create a dataset object
+    X_train, X_val, y_train, y_val = train_test_split(
+        images, labels, test_size=0.1, random_state=713, stratify=labels
+    )
+
     train_dataset = cifar10_dataset(
-        images, labels, transforms=get_train_transformations()
+        X_train, y_train, transforms=get_train_transformations()
     )
+    val_dataset = cifar10_dataset(X_val, y_val, transforms=get_test_transformations())
 
-    # Unpickle test dataset
-    test_images, test_labels = unpickle_cifar10_test()
-    valid_dataset = cifar10_dataset(
-        test_images, test_labels, transforms=get_test_transformations()
+    dataloaders = {
+        "train": DataLoader(
+            train_dataset,
+            batch_size=128,
+            shuffle=True,
+            pin_memory=PIN_MEMORY,
+            num_workers=4,
+        ),
+        "val": DataLoader(
+            val_dataset, batch_size=64, pin_memory=PIN_MEMORY, num_workers=4
+        ),
+    }
+
+    model = CIFAR10Model(num_classes=10)
+    l1_criterion = nn.CrossEntropyLoss()
+    # l1_optim = torch.optim.SGD(model.parameters(), lr=1e-3, weight_decay=1e-4)
+    l1_optim = torch.optim.Adam(
+        model.parameters(),
+        lr=0.01,
+        betas=(0.9, 0.999),
+        eps=1e-08,
+        weight_decay=0,
+        amsgrad=False,
     )
-
-    model = cifar10_model(num_classes=10)
-    model = tez.Tez(model)
-
-    # Train the model
-    model.fit(
-        train_dataset,
-        valid_dataset=valid_dataset,
-        config=CONFIG,
-        callbacks=[ES],
+    # Lower learning rate after 5 epochs of no validation loss
+    l1_scheduler = lr_scheduler.ReduceLROnPlateau(l1_optim, patience=5)
+    trained_model = train_model(
+        model=model,
+        dataloader=dataloaders,
+        criterion=l1_criterion,
+        optimizer=l1_optim,
+        device=DEVICE,
+        save_path="model.pth",
+        num_epochs=50,
+        scheduler=l1_scheduler,
+        early_stopping=EarlyStopping(patience=10),
     )
 
 

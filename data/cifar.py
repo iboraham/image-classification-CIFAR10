@@ -1,5 +1,6 @@
-import torch
 import numpy as np
+import PIL
+import torch
 
 
 class cifar10_dataset(torch.utils.data.Dataset):
@@ -12,14 +13,10 @@ class cifar10_dataset(torch.utils.data.Dataset):
         return len(self.images)
 
     def __getitem__(self, idx):
-        image = self.images[idx]
+        img = self.images[idx]
+        X = PIL.Image.fromarray(img).convert("RGB")
         label = self.labels[idx]
-        if self.transforms is not None:
-            image = self.transforms(image=image)["image"]
 
-        image = np.transpose(image, (2, 0, 1))
-
-        return {
-            "image": torch.tensor(image, dtype=torch.float),
-            "label": torch.tensor(label, dtype=torch.float),
-        }
+        if self.transforms:
+            X = self.transforms(X)
+        return torch.tensor(X, dtype=torch.float), torch.tensor(label, dtype=torch.long)

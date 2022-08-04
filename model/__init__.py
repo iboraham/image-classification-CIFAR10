@@ -1,1 +1,1 @@
-from .model import cifar10_model
+from .model import CIFAR10Model
