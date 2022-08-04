@@ -72,6 +72,7 @@ def train_model(
             tbar_train = tqdm(
                 dataloader[phase], position=1, leave=False, desc=f"{phase}"
             )
+            accs = []
             for inputs, labels in tbar_train:
                 inputs = inputs.to(device)
                 labels = labels.to(device)
@@ -92,18 +93,19 @@ def train_model(
 
                 # statistics
                 temp = loss.item() * inputs.size(0)
-                tbar_train.set_postfix({"Loss": f"{temp:.3f}"})
+                # tbar_train.set_postfix({"Loss": f"{temp:.3f}"})
                 running_loss += temp
                 temp = torch.sum(preds == labels.data)
-                tbar_train.set_postfix({"Acc": f"{temp.item()/inputs.size(0):.3%}"})
+                accs.append(temp.item())
+                tbar_train.set_postfix({"Acc": f"{np.mean(accs)/100:.3%}"})
                 running_corrects += temp
 
             epoch_loss = running_loss / len(dataloader[phase].dataset)
             epoch_acc = running_corrects.double() / len(dataloader[phase].dataset)
 
-            tbar_epoch.set_postfix(
-                {f"{phase}_loss": epoch_loss, f"{phase}_acc": epoch_acc}
-            )
+            # tbar_epoch.set_postfix(
+            #     {f"{phase}_loss": epoch_loss, f"{phase}_acc": epoch_acc}
+            # )
 
             if phase == "val" and epoch_acc > best_acc:
                 best_acc = epoch_acc
