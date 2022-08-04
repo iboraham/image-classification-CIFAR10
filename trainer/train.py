@@ -138,10 +138,10 @@ def train_model(
                     pd.DataFrame(
                         {
                             "epoch": [epoch],
-                            "train_loss": [train_loss_history[-1]],
-                            "val_loss": [val_loss_history[-1]],
-                            "train_acc": [train_acc_history[-1]],
-                            "val_acc": [val_acc_history[-1]],
+                            "train_loss": [train_loss_history[-1].detach().cpu()],
+                            "val_loss": [val_loss_history[-1].detach().cpu()],
+                            "train_acc": [train_acc_history[-1].detach().cpu()],
+                            "val_acc": [val_acc_history[-1].detach().cpu()],
                         }
                     )
                 )
