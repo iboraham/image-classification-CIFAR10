@@ -51,14 +51,8 @@ def main(args):
     model.to(DEVICE)
 
     criterion = nn.CrossEntropyLoss()
-    # optim = torch.optim.SGD(model.parameters(), lr=1e-3, weight_decay=1e-4)
-    optim = torch.optim.Adam(
-        model.parameters(),
-        lr=0.01,
-        betas=(0.9, 0.999),
-        eps=1e-08,
-        weight_decay=0,
-        amsgrad=False,
+    optim = torch.optim.SGD(
+        model.parameters(), lr=1e-2, weight_decay=1e-3, momentum=0.9
     )
     # Lower learning rate after 5 epochs of no validation loss
     l1_scheduler = lr_scheduler.ReduceLROnPlateau(optim, patience=5)
