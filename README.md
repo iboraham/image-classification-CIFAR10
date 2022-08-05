@@ -24,4 +24,4 @@ To unpickle the dataset, you can use the following command:
 python data/unpickle_cifar10.py
 ```
 
-# !Work in Progress!
+# Work in Progress!
