@@ -50,9 +50,9 @@ def main(args):
     model = CIFAR10Model(num_classes=10)
     model.to(DEVICE)
 
-    l1_criterion = nn.CrossEntropyLoss()
-    # l1_optim = torch.optim.SGD(model.parameters(), lr=1e-3, weight_decay=1e-4)
-    l1_optim = torch.optim.Adam(
+    criterion = nn.CrossEntropyLoss()
+    # optim = torch.optim.SGD(model.parameters(), lr=1e-3, weight_decay=1e-4)
+    optim = torch.optim.Adam(
         model.parameters(),
         lr=0.01,
         betas=(0.9, 0.999),
@@ -61,12 +61,12 @@ def main(args):
         amsgrad=False,
     )
     # Lower learning rate after 5 epochs of no validation loss
-    l1_scheduler = lr_scheduler.ReduceLROnPlateau(l1_optim, patience=5)
+    l1_scheduler = lr_scheduler.ReduceLROnPlateau(optim, patience=5)
     trained_model = train_model(
         model=model,
         dataloader=dataloaders,
-        criterion=l1_criterion,
-        optimizer=l1_optim,
+        criterion=criterion,
+        optimizer=optim,
         device=DEVICE,
         save_path="model.pth",
         num_epochs=50,
