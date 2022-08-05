@@ -97,7 +97,7 @@ def train_model(
                 running_loss += temp
                 temp = torch.sum(preds == labels.data)
                 accs.append(temp.item() / inputs.size(0))
-                tbar_train.set_postfix({"Acc": f"{np.mean(accs)/100:.3%}"})
+                tbar_train.set_postfix({"Acc": f"{np.mean(accs):.3%}"})
                 running_corrects += temp
 
             epoch_loss = running_loss / len(dataloader[phase].dataset)
