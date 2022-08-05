@@ -31,7 +31,8 @@ def unpickle_cifar10(verbose: bool = False) -> None:
         dataBatch = unpickle(f"./cifar-10-batches-py/data_batch_{i}")
         imagesBatch = dataBatch[b"data"].copy()
         labelBatch = dataBatch[b"labels"].copy()
-        imagesBatch = imagesBatch.reshape(10000, 32, 32, 3)
+        imagesBatch = imagesBatch.reshape(-1, 3, 32, 32)
+        imagesBatch = imagesBatch.transpose(0, 2, 3, 1)
         images[counter : counter + 10000] = imagesBatch
         labels[counter : counter + 10000] = labelBatch
         counter += 1
@@ -47,6 +48,8 @@ def unpickle_cifar10_test(verbose: bool = False) -> None:
     dataBatch = unpickle(f"./cifar-10-batches-py/test_batch")
     images = dataBatch[b"data"].copy()
     labels = dataBatch[b"labels"].copy()
+    images = images.reshape(-1, 3, 32, 32)
+    images = images.transpose(0, 2, 3, 1)
     if verbose:
         print(f"Images shape: {images.shape}")
         print(f"Labels shape: {labels.shape}")
@@ -54,4 +57,5 @@ def unpickle_cifar10_test(verbose: bool = False) -> None:
 
 
 if __name__ == "__main__":
+    # continue from this if you want to unpickle the train, test set
     unpickle_cifar10()
