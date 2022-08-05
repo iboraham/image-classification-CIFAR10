@@ -96,7 +96,7 @@ def train_model(
                 # tbar_train.set_postfix({"Loss": f"{temp:.3f}"})
                 running_loss += temp
                 temp = torch.sum(preds == labels.data)
-                accs.append(temp.item())
+                accs.append(temp.item() / inputs.size(0))
                 tbar_train.set_postfix({"Acc": f"{np.mean(accs)/100:.3%}"})
                 running_corrects += temp
 
@@ -138,10 +138,10 @@ def train_model(
                     pd.DataFrame(
                         {
                             "epoch": [epoch],
-                            "train_loss": [train_loss_history[-1].detach().cpu()],
-                            "val_loss": [val_loss_history[-1].detach().cpu()],
-                            "train_acc": [train_acc_history[-1].detach().cpu()],
-                            "val_acc": [val_acc_history[-1].detach().cpu()],
+                            "train_loss": [train_loss_history[-1]],
+                            "val_loss": [val_loss_history[-1]],
+                            "train_acc": [train_acc_history[-1].cpu()],
+                            "val_acc": [val_acc_history[-1].cpu()],
                         }
                     )
                 )
