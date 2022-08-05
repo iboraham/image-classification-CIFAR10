@@ -19,4 +19,6 @@ class cifar10_dataset(torch.utils.data.Dataset):
 
         if self.transforms:
             X = self.transforms(X)
+        if label is None:
+            return torch.tensor(X, dtype=torch.float)
         return torch.tensor(X, dtype=torch.float), torch.tensor(label, dtype=torch.long)
