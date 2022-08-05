@@ -24,4 +24,29 @@ To unpickle the dataset, you can use the following command:
 python data/unpickle_cifar10.py
 ```
 
-# Work in Progress!
+## Usage
+---
+### Training
+
+To train the network, you can use the following command and retrain model:
+
+```bash
+python main.py
+```
+
+Model will be saved as `model.pth` in the current directory. 
+
+Ps. There is no current support for training model on starting from current checkpoint, but it'll be easy to add.
+
+### Testing
+
+To test the network and reproduce the results, you can use the following command:
+
+```bash
+python test.py
+```
+
+- Results:
+
+
+## :construction: !Work in progress!
