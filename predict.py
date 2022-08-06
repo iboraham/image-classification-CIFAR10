@@ -48,7 +48,7 @@ def main(args):
     if not args.fp:
         images, _ = unpickle_cifar10_test()
         i = random.randint(0, len(images) - 1)
-        Image.fromarray(images[i]).save("docs/predict.png")
+        Image.fromarray(images[i]).save("docs/prediction.png")
         images = [images[i]]
     else:
         images = [read_image(args.fp)]
