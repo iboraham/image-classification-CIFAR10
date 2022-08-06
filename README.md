@@ -25,7 +25,7 @@ python data/unpickle_cifar10.py
 ```
 
 ## Usage
----
+
 ### Training
 
 To train the network, you can use the following command and retrain model:
@@ -34,7 +34,7 @@ To train the network, you can use the following command and retrain model:
 python main.py
 ```
 
-Model will be saved as `model.pth` in the current directory. 
+Model will be saved as `model.pth` in the current directory.
 
 Ps. There is no current support for training model on starting from current checkpoint, but it'll be easy to add.
 
@@ -47,6 +47,24 @@ python test.py
 ```
 
 - Results:
+  
+| epoch | train_loss | val_loss | train_acc | val_acc |
+|-------|------------|----------|-----------|---------|
+| 1     | 0.287      | 0.192    | 0.896     | 0.937   |
+| 2     | 0.155      | 0.174    | 0.948     | 0.945   |
+| 3     | 0.111      | 0.116    | 0.963     | 0.960   |
+| 4     | 0.095      | 0.180    | 0.968     | 0.946   |
+| 5     | 0.081      | 0.391    | 0.973     | 0.910   |
+| 6     | 0.074      | 0.123    | 0.975     | 0.960   |
 
+![model_logs](docs/model_logs.png)
 
-## :construction: !Work in progress!
+### Predict Custom Image
+
+To predict the any image, you can use the following command:
+
+```bash
+python predict.py --fp <path to image>
+```
+
+If you don't specify the path to image, it'll select random image from test set. and will save the result as `prediction.png` in the docs directory.
