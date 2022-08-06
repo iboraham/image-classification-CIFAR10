@@ -68,3 +68,38 @@ python predict.py --fp <path to image>
 ```
 
 If you don't specify the path to image, it'll select random image from test set. and will save the result as `prediction.png` in the docs directory.
+
+## Examples
+
+- Airplane:
+![plane](docs/plane.jpg)
+
+```sh
+> python predict.py --fp docs/plane.jpg
+
+Most possible class: airplane
+Probabilities: {'airplane': '0.89', 'automobile': '0.00', 'bird': '0.00', 'cat': '0.00', 'deer': '0.02', 'dog': '0.00', 'frog': '0.00', 'horse': '0.00', 'ship': '0.09', 'truck': '0.00'}
+```
+
+- Bird:
+![bird](docs/bird.png)
+
+```sh
+> python predict.py --fp docs/bird.png
+Most possible class: bird
+Probabilities: {'airplane': '0.06', 'automobile': '0.00', 'bird': '0.94', 'cat': '0.00', 'deer': '0.00', 'dog': '0.00', 'frog': '0.00', 'horse': '0.00', 'ship': '0.00', 'truck': '0.00'}
+```
+
+![cat](docs/cat.jpeg)
+
+```sh
+> python predict.py --fp docs/cat.jpeg
+Most possible class: ship
+Probabilities: {'airplane': '0.08', 'automobile': '0.08', 'bird': '0.19', 'cat': '0.13', 'deer': '0.00', 'dog': '0.00', 'frog': '0.11', 'horse': '0.00', 'ship': '0.37', 'truck': '0.03'}
+```
+
+<div style="width:480px"><iframe allow="fullscreen" frameBorder="0" height="451" src="https://giphy.com/embed/pgHFlfMjrWjBFfZAOl/video" width="480"></iframe></div>
+
+## Conclusion
+
+It seems this is not very good model, probably dataset not have complicated pictures. However, it's very easy and fun to get started with deep learning with this dataset. I hope you enjoy it and find it useful.
