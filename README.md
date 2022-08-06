@@ -98,7 +98,7 @@ Most possible class: ship
 Probabilities: {'airplane': '0.08', 'automobile': '0.08', 'bird': '0.19', 'cat': '0.13', 'deer': '0.00', 'dog': '0.00', 'frog': '0.11', 'horse': '0.00', 'ship': '0.37', 'truck': '0.03'}
 ```
 
-<div style="width:480px"><iframe allow="fullscreen" frameBorder="0" height="451" src="https://giphy.com/embed/pgHFlfMjrWjBFfZAOl/video" width="480"></iframe></div>
+# :astonished:
 
 ## Conclusion
 
